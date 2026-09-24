@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from . import models, schemas, database
-from ..utils import security
+from .utils import security
 
 def get_current_user(token: str = Depends(security.oauth2_scheme), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(
