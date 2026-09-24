@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .stepper {
+            display: flex;
+            background: var(--surface);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            color: var(--primary);
+        }
+
+        .step.active .step-icon {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .step.completed .step-icon {
+            border-color: var(--primary);
+            background: white;
+            color: var(--primary);
+        }
+
+        .step.completed::after {
+            background: var(--primary);
+        }
+
+        .step-content {
+            padding: 2rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary);
+        }
+
+        .time-slot.selected {
+            background: var(--primary-bg);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .booking-actions {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            background: var(--background);
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .booking-summary-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: left;
+            margin-top: 2rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 0.75rem;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-hands-helping text-primary"></i>
+                    CoopConnect <span>AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="customer.html" class="nav-item active">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="booking-container">
+                <div class="stepper" id="stepper">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-icon">1</div>
+                        <div>Service</div>
+                    </div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-icon">2</div>
+                        <div>Schedule</div>
+                    </div>
+                    <div class="step" id="step3-indicator">
+                        <div class="step-icon">3</div>
+                        <div>Address</div>
+                    </div>
+                    <div class="step" id="step4-indicator">
+                        <div class="step-icon">4</div>
+                        <div>Confirm</div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Service Details -->
+                <div class="step-content active" id="step1">
+                    <h2 style="margin-bottom: 1.5rem;">Selected Service</h2>
+                    <div id="selectedWorkerCard">
+                        <!-- Populated via JS -->
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <label class="form-label">Service Description (Optional)</label>
+                        <textarea class="form-control" rows="3" placeholder="Describe what needs to be done..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Date & Time -->
+                <div class="step-content" id="step2">
+                    <h2 style="margin-bottom: 1.5rem;">Select Date & Time</h2>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="bookingDate" value="2026-09-24">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Available Slots</label>
+                        <div class="time-slots">
+                            <div class="time-slot" onclick="selectSlot(this)">10:00 AM</div>
+                            <div class="time-slot" onclick="selectSlot(this)">11:30 AM</div>
+                            <div class="time-slot" onclick="selectSlot(this)">2:00 PM</div>
+                            <div class="time-slot selected" onclick="selectSlot(this)">4:30 PM</div>
+                            <div class="time-slot" onclick="selectSlot(this)">6:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Address -->
+                <div class="step-content" id="step3">
+                    <h2 style="margin-bottom: 1.5rem;">Service Location</h2>
+                    
+                    <div style="background: var(--primary-bg); padding: 1rem; border-radius: var(--radius); margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;">
+                        <i class="fas fa-map-marker-alt text-primary" style="margin-top: 4px;"></i>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Home (Saved Address)</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">124, RS Puram, Coimbatore, Tamil Nadu 641002</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">House/Flat No</label>
+                        <input type="text" class="form-control" value="124">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Street / Area</label>
+                        <input type="text" class="form-control" value="RS Puram">
+                    </div>
+                </div>
+
+                <!-- Step 4: Confirm -->
+                <div class="step-content" id="step4">
+                    <h2 style="margin-bottom: 1.5rem;">Confirm Booking</h2>
+                    
+                    <div class="booking-summary-card">
+                        <div class="summary-row">
+                            <span class="text-muted">Worker</span>
+                            <span style="font-weight: 500;" id="summaryWorkerName">Ravi Kumar</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="text-muted">Service</span>
+                            <span style="font-weight: 500;" id="summarySkill">Electrician</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="text-muted">Date & Time</span>
+                            <span style="font-weight: 500;">24 Sept 2026, 4:30 PM</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="text-muted">Location</span>
+                            <span style="font-weight: 500; text-align: right; max-width: 50%;">124, RS Puram, Coimbatore</span>
+                        </div>
+                        <div class="summary-row" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--border);">
+                            <span style="font-weight: 600;">Estimated Price</span>
+                            <span style="font-weight: 700; color: var(--primary-dark); font-size: 1.25rem;" id="summaryPrice">₹450</span>
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Final price may vary based on actual work</div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; align-items: center; color: var(--text-muted); font-size: 0.875rem;">
+                        <i class="fas fa-shield-alt text-primary"></i> Covered by Cooperative Trust & Safety Guarantee
+                    </div>
+                </div>
+
+                <!-- Success Screen -->
+                <div class="step-content" id="stepSuccess">
+                    <div class="success-screen">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 style="margin-bottom: 0.5rem;">Booking Confirmed!</h2>
+                        <p class="text-muted" style="margin-bottom: 2rem;">Your cooperative worker has accepted the request.</p>
+                        
+                        <div style="background: var(--background); border-radius: var(--radius); padding: 1.5rem; max-width: 400px; margin: 0 auto 2rem; border: 1px solid var(--border);">
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem;">Booking ID</div>
+                            <div style="font-weight: 700; font-size: 1.25rem; letter-spacing: 1px; margin-bottom: 1rem;">CC-2026-1042</div>
+                            
+                            <div style="display: flex; gap: 1rem; align-items: center; text-align: left; background: white; padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" id="successAvatar" alt="Worker" style="width: 50px; height: 50px; border-radius: 50%;">
+                                <div>
+                                    <div style="font-weight: 600;" id="successWorkerName">Ravi Kumar</div>
+                                    <div style="font-size: 0.875rem; color: var(--success);"><i class="fas fa-clock"></i> Arriving in ~20 mins</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 justify-center">
+                            <button class="btn btn-outline" onclick="window.location.href='customer.html'">Back to Home</button>
+                            <button class="btn btn-primary" onclick="window.location.href='tracking.html'"><i class="fas fa-map-marker-alt"></i> Track Worker</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="booking-actions" id="bookingActions">
+                    <button class="btn btn-outline" id="btnBack" style="display: none;" onclick="prevStep()">Back</button>
+                    <div></div> <!-- Spacer -->
+                    <button class="btn btn-primary" id="btnNext" onclick="nextStep()">Continue</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        let selectedWorker = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load selected worker
+            const workerId = localStorage.getItem('selectedWorker') || 'W001';
+            selectedWorker = DATA.workers.find(w => w.id === workerId);
+            
+            if (selectedWorker) {
+                // Populate Step 1 Card
+                document.getElementById('selectedWorkerCard').innerHTML = `
+                    <div style="display: flex; gap: 1.5rem; align-items: center; padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--background);">
+                        <img src="https://ui-avatars.com/api/?name=${selectedWorker.name.replace(' ', '+')}&background=047857&color=fff" style="width: 60px; height: 60px; border-radius: 50%;">
+                        <div>
+                            <h3 style="margin-bottom: 0.25rem;">${selectedWorker.name} <i class="fas fa-check-circle text-success" style="font-size: 0.875rem;"></i></h3>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">${selectedWorker.skill} • ${selectedWorker.rating} ★</div>
+                        </div>
+                        <div style="margin-left: auto; text-align: right;">
+                            <div style="font-weight: 700; color: var(--primary); font-size: 1.25rem;">${selectedWorker.price}</div>
+                        </div>
+                    </div>
+                `;
+
+                // Populate Summary
+                document.getElementById('summaryWorkerName').textContent = selectedWorker.name;
+                document.getElementById('summarySkill').textContent = selectedWorker.skill;
+                document.getElementById('summaryPrice').textContent = selectedWorker.price;
+                
+                // Populate Success
+                document.getElementById('successWorkerName').textContent = selectedWorker.name;
+                document.getElementById('successAvatar').src = `https://ui-avatars.com/api/?name=${selectedWorker.name.replace(' ', '+')}&background=047857&color=fff`;
+            }
+        });
+
+        function selectSlot(el) {
+            document.querySelectorAll('.time-slot').forEach(n => n.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function updateUI() {
+            // Update steps visibility
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('active');
+            }
+            document.getElementById(`step${currentStep}`).classList.add('active');
+
+            // Update stepper indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step${i}-indicator`);
+                if (i < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (i === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            }
+
+            // Update buttons
+            const btnBack = document.getElementById('btnBack');
+            const btnNext = document.getElementById('btnNext');
+
+            if (currentStep === 1) {
+                btnBack.style.display = 'none';
+            } else {
+                btnBack.style.display = 'inline-flex';
+            }
+
+            if (currentStep === totalSteps) {
+                btnNext.innerHTML = 'Confirm Booking <i class="fas fa-check"></i>';
+                btnNext.classList.replace('btn-primary', 'btn-primary'); // Keep it primary
+            } else {
+                btnNext.innerHTML = 'Continue';
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateUI();
+            } else if (currentStep === totalSteps) {
+                // Confirm booking
+                document.getElementById('stepper').style.display = 'none';
+                document.getElementById('step4').classList.remove('active');
+                document.getElementById('stepSuccess').classList.add('active');
+                document.getElementById('bookingActions').style.display = 'none';
+                
+                // Save to local storage for tracking/payment simulation
+                localStorage.setItem('activeBookingStatus', 'confirmed');
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        }
+    </script>
+</body>
+</html>

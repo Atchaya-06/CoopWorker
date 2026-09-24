@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoopConnect AI - Trusted Local Services</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Landing Page Specific Styles */
+        .hero {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--background) 0%, #e6f9f0 100%);
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .hero-text h1 span {
+            color: var(--primary);
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 90%;
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .dashboard-mockup {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            z-index: 3;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .fc-1 { top: -20px; right: -20px; color: var(--success); }
+        .fc-2 { bottom: 40px; left: -30px; color: var(--ai); animation-delay: 1s; }
+        .fc-3 { bottom: -20px; right: 20px; color: var(--warning); animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Services Grid */
+        .service-card {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: var(--primary-bg);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card-btn {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Trust Section */
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .trust-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* AI Section */
+        .ai-section {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--ai-bg) 100%);
+        }
+
+        .ai-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #bfdbfe;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--ai), #8b5cf6);
+        }
+
+        .match-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ai);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .match-factors {
+            margin-top: 1.5rem;
+        }
+
+        .factor {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .factor-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin-top: 0.25rem;
+            overflow: hidden;
+        }
+
+        .factor-fill {
+            height: 100%;
+            background: var(--ai);
+            border-radius: 3px;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 4rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 200px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        /* AI Chart Mockup */
+        .chart-mockup {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-label { width: 100px; font-weight: 500; font-size: 0.875rem; }
+        .chart-bar-container { flex: 1; background: var(--border); height: 12px; border-radius: 6px; overflow: hidden; }
+        .chart-bar { height: 100%; border-radius: 6px; }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-logo span { color: var(--primary-light); }
+        .footer-text { color: #9ca3af; }
+        
+        .footer-links h4 { color: white; margin-bottom: 1.5rem; }
+        .footer-links ul li { margin-bottom: 0.75rem; }
+        .footer-links ul a { color: #9ca3af; transition: color 0.2s; }
+        .footer-links ul a:hover { color: white; }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 992px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text p { margin: 0 auto 2.5rem; }
+            .timeline { flex-direction: column; gap: 2rem; }
+            .timeline::before {
+                width: 2px; height: 100%; left: 24px; top: 0;
+            }
+            .timeline-step { width: 100%; display: flex; align-items: flex-start; text-align: left; gap: 1.5rem; }
+            .step-number { margin: 0; flex-shrink: 0; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-hands-helping text-primary"></i>
+                CoopConnect <span>AI</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="#services">Services</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#for-workers">For Workers</a>
+                <a href="#about">About</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#" class="btn btn-outline demo-trigger">Login</a>
+                <a href="#" class="btn btn-primary demo-trigger">Explore Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text animate-on-scroll">
+                <h1>Trusted Local Services.<br><span>Powered by Cooperation.</span></h1>
+                <p>Connecting households and communities with verified cooperative workers through intelligent matching, transparent booking, and worker-first technology.</p>
+                <div class="flex gap-4" style="justify-content: flex-start;">
+                    <button class="btn btn-primary demo-trigger">
+                        Book a Service <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-outline demo-trigger">
+                        <i class="fas fa-play"></i> Explore Demo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-visual animate-on-scroll" style="animation-delay: 0.2s;">
+                <div class="floating-card fc-1">
+                    <i class="fas fa-bolt"></i> 98% Match
+                </div>
+                <div class="floating-card fc-2">
+                    <i class="fas fa-check-circle"></i> Verified Worker
+                </div>
+                <div class="floating-card fc-3">
+                    <i class="fas fa-star"></i> 4.9 Rating
+                </div>
+                
+                <div class="dashboard-mockup">
+                    <div class="flex justify-between items-center" style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Finding worker for:</div>
+                            <div style="font-weight: 600;">Electrical Repair <span class="badge badge-ai" style="margin-left: 0.5rem;"><i class="fas fa-sparkles"></i> AI Match</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 items-center" style="background: var(--background); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem;">
+                        <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" alt="Worker" style="width: 60px; height: 60px; border-radius: 50%;">
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.25rem;">Ravi Kumar <i class="fas fa-check-circle text-primary"></i></h4>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); display: flex; gap: 1rem;">
+                                <span><i class="fas fa-star text-warning"></i> 4.8 (124 jobs)</span>
+                                <span><i class="fas fa-map-marker-alt"></i> 1.8 km away</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 700; color: var(--primary);">₹450</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">per visit</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; border-radius: var(--radius);">Accept & Book</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="section section-light">
+        <div class="container animate-on-scroll">
+            <div class="section-title">
+                <h2>Built around trust</h2>
+                <p>We work directly with Labour Cooperative Federations to ensure every worker is verified, skilled, and protected.</p>
+            </div>
+            
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-user-shield"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Verified Workers</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">100% background-checked through cooperative federations.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-tools"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Skilled Professionals</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">Certified and experienced in their respective trades.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Transparent Pricing</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">No hidden fees. Standardized cooperative rates.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-lock"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Secure Payments</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">Direct digital payments to workers with instant settlement.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-hands-holding"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Worker Welfare</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">Every booking contributes to worker insurance and benefits.</p>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Cooperative Ownership</h4>
+                        <p class="text-muted" style="font-size: 0.875rem;">A platform built to empower the community, not exploit it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="section">
+        <div class="container animate-on-scroll">
+            <div class="section-title">
+                <h2>How it works</h2>
+                <p>Booking a verified cooperative worker is simple, fast, and secure.</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-step">
+                    <div class="step-number">01</div>
+                    <h4>Choose a Service</h4>
+                    <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Select from our wide range of cooperative verified services.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number"><i class="fas fa-sparkles text-ai" style="font-size: 1rem;"></i></div>
+                    <h4>AI Finds the Right Worker</h4>
+                    <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Our intelligence engine matches you based on skill, location, and rating.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">03</div>
+                    <h4>Book & Track</h4>
+                    <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Confirm booking and track your worker's live location.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">04</div>
+                    <h4>Pay & Review</h4>
+                    <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Pay securely online and rate your experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section section-light">
+        <div class="container animate-on-scroll">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Professional services delivered by verified members of local labour cooperatives.</p>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-6" id="servicesGrid">
+                <!-- Injected via JS or hardcoded for demo -->
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #f59e0b; background: #fef3c7;"><i class="fas fa-bolt"></i></div>
+                    <h3>Electrician</h3>
+                    <p>Wiring, repairs, appliance installation</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #3b82f6; background: #eff6ff;"><i class="fas fa-faucet"></i></div>
+                    <h3>Plumber</h3>
+                    <p>Leak fixing, pipe installation</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #10b981; background: #d1fae5;"><i class="fas fa-broom"></i></div>
+                    <h3>Cleaning</h3>
+                    <p>Deep cleaning, dusting, sanitization</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #8b5cf6; background: #ede9fe;"><i class="fas fa-hammer"></i></div>
+                    <h3>Carpenter</h3>
+                    <p>Furniture repair, wood works</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #ef4444; background: #fee2e2;"><i class="fas fa-paint-roller"></i></div>
+                    <h3>Painting</h3>
+                    <p>Wall painting, touchups, polishing</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #ec4899; background: #fce7f3;"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3>Caregiver</h3>
+                    <p>Elderly care, nursing assistance</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #22c55e; background: #dcfce7;"><i class="fas fa-leaf"></i></div>
+                    <h3>Gardener</h3>
+                    <p>Lawn care, pruning, landscaping</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+                <div class="service-card demo-trigger">
+                    <div class="service-icon" style="color: #64748b; background: #f1f5f9;"><i class="fas fa-car"></i></div>
+                    <h3>Driver</h3>
+                    <p>Temporary drivers, travel</p>
+                    <span class="service-card-btn">Explore <i class="fas fa-chevron-right"></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Section -->
+    <section class="section ai-section">
+        <div class="container">
+            <div class="grid grid-cols-2 gap-8 items-center">
+                <div class="animate-on-scroll">
+                    <div class="badge badge-ai mb-4" style="margin-bottom: 1rem;"><i class="fas fa-robot"></i> CoopConnect AI Engine</div>
+                    <h2 style="margin-bottom: 1rem;">Smarter matching.<br>Better outcomes.</h2>
+                    <p class="text-muted" style="margin-bottom: 2rem; font-size: 1.125rem;">Our proprietary matching algorithm considers over 15 data points to connect you with the most suitable cooperative worker for your specific needs, ensuring high quality service and reliability.</p>
+                    
+                    <ul style="margin-bottom: 2rem;">
+                        <li style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                            <i class="fas fa-check-circle text-primary" style="margin-top: 4px;"></i>
+                            <div>
+                                <strong>Skill Compatibility</strong>
+                                <p class="text-muted" style="font-size: 0.875rem;">Matches precise sub-skills (e.g. AC repair vs General Wiring)</p>
+                            </div>
+                        </li>
+                        <li style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                            <i class="fas fa-check-circle text-primary" style="margin-top: 4px;"></i>
+                            <div>
+                                <strong>Hyper-local Routing</strong>
+                                <p class="text-muted" style="font-size: 0.875rem;">Finds the closest available worker to minimize wait times</p>
+                            </div>
+                        </li>
+                        <li style="display: flex; gap: 1rem;">
+                            <i class="fas fa-check-circle text-primary" style="margin-top: 4px;"></i>
+                            <div>
+                                <strong>Historical Performance</strong>
+                                <p class="text-muted" style="font-size: 0.875rem;">Prioritizes consistently highly-rated professionals</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="ai-card animate-on-scroll" style="animation-delay: 0.2s;">
+                    <div class="flex justify-between items-start" style="margin-bottom: 1.5rem;">
+                        <div>
+                            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase;">AI Smart Match</div>
+                            <div class="match-score">98% <span style="font-size: 1rem; font-weight: 500; color: var(--text);">Match</span></div>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;">
+                    </div>
+                    
+                    <h4 style="margin-bottom: 0.25rem;">Ravi Kumar</h4>
+                    <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem;">Electrician • 6 years exp • 1.8 km away</div>
+                    
+                    <div class="match-factors">
+                        <div class="factor">
+                            <span>Skill Match</span>
+                            <span>35%</span>
+                        </div>
+                        <div class="factor-bar"><div class="factor-fill" style="width: 100%;"></div></div>
+                        
+                        <div class="factor" style="margin-top: 1rem;">
+                            <span>Location proximity</span>
+                            <span>25%</span>
+                        </div>
+                        <div class="factor-bar"><div class="factor-fill" style="width: 90%;"></div></div>
+                        
+                        <div class="factor" style="margin-top: 1rem;">
+                            <span>Availability</span>
+                            <span>20%</span>
+                        </div>
+                        <div class="factor-bar"><div class="factor-fill" style="width: 100%;"></div></div>
+                        
+                        <div class="factor" style="margin-top: 1rem;">
+                            <span>Rating & Experience</span>
+                            <span>20%</span>
+                        </div>
+                        <div class="factor-bar"><div class="factor-fill" style="width: 85%;"></div></div>
+                    </div>
+                    
+                    <button class="btn btn-primary demo-trigger" style="width: 100%; margin-top: 2rem;">Book Worker</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin / AI Intelligence Preview -->
+    <section class="section">
+        <div class="container animate-on-scroll">
+            <div class="grid grid-cols-2 gap-8 items-center">
+                <div>
+                    <div class="chart-mockup">
+                        <h4 style="margin-bottom: 1.5rem;">AI Demand Forecast (Next 48 hrs)</h4>
+                        
+                        <div class="chart-row">
+                            <div class="chart-label">Electrician</div>
+                            <div class="chart-bar-container"><div class="chart-bar" style="width: 70%; background: #f59e0b;"></div></div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-label">Plumber</div>
+                            <div class="chart-bar-container"><div class="chart-bar" style="width: 45%; background: #3b82f6;"></div></div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-label">Cleaning</div>
+                            <div class="chart-bar-container"><div class="chart-bar" style="width: 95%; background: #10b981;"></div></div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-label">Carpenter</div>
+                            <div class="chart-bar-container"><div class="chart-bar" style="width: 30%; background: #8b5cf6;"></div></div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--ai-bg); border-radius: var(--radius); border-left: 4px solid var(--ai);">
+                            <div style="font-weight: 600; color: var(--ai); font-size: 0.875rem; margin-bottom: 0.25rem;"><i class="fas fa-lightbulb"></i> AI Insight</div>
+                            <p style="font-size: 0.875rem; color: var(--text);">Cleaning demand is expected to increase by 24% this weekend. Recommended to notify nearby cooperative zones.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 style="margin-bottom: 1rem;">Predict demand.<br>Allocate smarter.</h2>
+                    <p class="text-muted" style="margin-bottom: 2rem; font-size: 1.125rem;">CoopConnect AI empowers Labour Cooperative Federations with powerful workforce intelligence to balance demand and supply.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card" style="padding: 1.25rem;">
+                            <div class="text-primary" style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fas fa-chart-line"></i></div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Demand Forecasting</h4>
+                            <p class="text-muted" style="font-size: 0.75rem;">Predict service needs based on historical data and seasonality.</p>
+                        </div>
+                        <div class="card" style="padding: 1.25rem;">
+                            <div class="text-primary" style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fas fa-users-cog"></i></div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Workforce Allocation</h4>
+                            <p class="text-muted" style="font-size: 0.75rem;">Identify skill gaps and optimize worker deployment across zones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="footer-logo"><i class="fas fa-hands-helping" style="color: var(--primary-light);"></i> CoopConnect <span>AI</span></a>
+                    <p class="footer-text" style="margin-bottom: 1.5rem; max-width: 300px;">Trusted local services. Powered by cooperation. A digital marketplace built for Labour Cooperative Federations.</p>
+                    <div class="flex gap-4">
+                        <a href="#" style="color: white; font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: white; font-size: 1.25rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: white; font-size: 1.25rem;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Electrician</a></li>
+                        <li><a href="#">Plumber</a></li>
+                        <li><a href="#">Cleaning</a></li>
+                        <li><a href="#">All Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#">For Customers</a></li>
+                        <li><a href="#">For Workers</a></li>
+                        <li><a href="#">For Cooperatives</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Worker Rights</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 CoopConnect AI. All rights reserved. Hackathon Prototype.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Demo Navigation Modal -->
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Select Prototype Demo</h3>
+                <i class="fas fa-times modal-close"></i>
+            </div>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">Welcome to the CoopConnect AI interactive prototype. Choose a perspective to explore:</p>
+            
+            <div class="demo-options">
+                <a href="customer.html" class="demo-option">
+                    <div class="demo-option-icon"><i class="fas fa-user"></i></div>
+                    <div class="demo-option-text">
+                        <h4>Customer Portal</h4>
+                        <p>Browse services, experience AI matching, and book verified workers.</p>
+                    </div>
+                    <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--border);"></i>
+                </a>
+                
+                <a href="worker.html" class="demo-option">
+                    <div class="demo-option-icon" style="background: #fef3c7; color: #d97706;"><i class="fas fa-hard-hat"></i></div>
+                    <div class="demo-option-text">
+                        <h4>Worker Dashboard</h4>
+                        <p>Manage jobs, track earnings, and access cooperative welfare benefits.</p>
+                    </div>
+                    <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--border);"></i>
+                </a>
+                
+                <a href="admin.html" class="demo-option">
+                    <div class="demo-option-icon" style="background: var(--ai-bg); color: var(--ai);"><i class="fas fa-shield-alt"></i></div>
+                    <div class="demo-option-text">
+                        <h4>Cooperative Admin</h4>
+                        <p>Verify workers, view AI intelligence, and monitor platform health.</p>
+                    </div>
+                    <i class="fas fa-chevron-right" style="margin-left: auto; color: var(--border);"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

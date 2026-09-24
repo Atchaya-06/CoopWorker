@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .order-summary {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+        }
+
+        .payment-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .payment-option input {
+            margin-right: 1rem;
+        }
+
+        .payment-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--text-muted);
+        }
+
+        .payment-option.selected .payment-icon {
+            color: var(--primary);
+        }
+
+        /* Invoice Card (Success) */
+        .invoice-card {
+            display: none;
+            text-align: center;
+        }
+
+        .invoice-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-checkmark {
+            width: 60px;
+            height: 60px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .receipt-details {
+            text-align: left;
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .receipt-details::before, .receipt-details::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px; height: 20px;
+            background: white;
+            border-radius: 50%;
+            border: 1px dashed var(--border);
+            transform: translateY(-50%);
+        }
+        .receipt-details::before { left: -10px; border-left-color: transparent; border-top-color: transparent; border-bottom-color: transparent; }
+        .receipt-details::after { right: -10px; border-right-color: transparent; border-top-color: transparent; border-bottom-color: transparent; }
+
+        /* Rating Modal */
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            font-size: 2rem;
+            color: #d1d5db;
+        }
+        .rating-stars i { cursor: pointer; transition: color 0.2s; }
+        .rating-stars i:hover, .rating-stars i.active { color: var(--warning); }
+        
+        .feedback-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .feedback-chip {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .feedback-chip.active {
+            background: var(--primary-bg);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-hands-helping text-primary"></i> CoopConnect <span>AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="customer.html" class="nav-item">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="payment.html" class="nav-item active">
+                    <i class="fas fa-credit-card"></i> Payments
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header animate-fade-in-up">
+                <div class="user-greeting">
+                    <h1>Payment</h1>
+                </div>
+            </header>
+
+            <div class="payment-container animate-fade-in-up" id="paymentSection">
+                <h2 style="margin-bottom: 1.5rem;">Complete your payment</h2>
+                
+                <div class="order-summary">
+                    <h4 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">Service Details</h4>
+                    <div class="summary-row">
+                        <span class="text-muted">Service Charge</span>
+                        <span id="serviceCharge">₹450</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="text-muted">Cooperative Welfare Contribution <i class="fas fa-info-circle" title="Goes towards worker insurance and benefits"></i></span>
+                        <span>₹20</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="text-muted">Taxes & Fees</span>
+                        <span>₹0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Payable</span>
+                        <span id="totalPayable">₹470</span>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 1rem;">Select Payment Method</h4>
+                <div class="payment-options">
+                    <label class="payment-option selected">
+                        <input type="radio" name="paymentMethod" checked>
+                        <i class="fas fa-qrcode payment-icon"></i>
+                        <div>
+                            <div style="font-weight: 500;">UPI</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Google Pay, PhonePe, Paytm</div>
+                        </div>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod">
+                        <i class="fas fa-credit-card payment-icon"></i>
+                        <div>
+                            <div style="font-weight: 500;">Credit / Debit Card</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Visa, MasterCard, RuPay</div>
+                        </div>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod">
+                        <i class="fas fa-university payment-icon"></i>
+                        <div>
+                            <div style="font-weight: 500;">Net Banking</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">All major banks</div>
+                        </div>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; font-size: 1.125rem;" onclick="processPayment()">
+                    <i class="fas fa-lock"></i> Pay Securely
+                </button>
+                <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Payments are securely processed directly to the cooperative account.</p>
+            </div>
+
+            <!-- Invoice / Success Section -->
+            <div class="payment-container invoice-card" id="invoiceSection">
+                <div class="success-checkmark"><i class="fas fa-check"></i></div>
+                <h2 style="margin-bottom: 0.5rem;">Payment Successful!</h2>
+                <p class="text-muted">Thank you for supporting cooperative workers.</p>
+                
+                <div class="receipt-details">
+                    <div style="text-align: center; margin-bottom: 1rem;">
+                        <div style="font-weight: 700; font-size: 1.5rem;">₹470.00</div>
+                        <div style="font-size: 0.875rem; color: var(--success);"><i class="fas fa-check-circle"></i> Paid via UPI</div>
+                    </div>
+                    
+                    <div class="summary-row" style="font-size: 0.875rem;">
+                        <span class="text-muted">Transaction ID</span>
+                        <span style="font-weight: 500;">TXN-CC-849201</span>
+                    </div>
+                    <div class="summary-row" style="font-size: 0.875rem;">
+                        <span class="text-muted">Date & Time</span>
+                        <span style="font-weight: 500;">24 Sept 2026, 5:15 PM</span>
+                    </div>
+                    <div class="summary-row" style="font-size: 0.875rem;">
+                        <span class="text-muted">Worker Name</span>
+                        <span style="font-weight: 500;" id="invoiceWorkerName">Ravi Kumar</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4" style="margin-top: 2rem;">
+                    <button class="btn btn-outline" style="flex: 1;" onclick="window.location.href='customer.html'">Home</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="openRatingModal()">Rate Experience</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>How was your experience?</h3>
+                <i class="fas fa-times modal-close"></i>
+            </div>
+            
+            <div style="text-align: center;">
+                <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" id="ratingAvatar" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 0.5rem;">
+                <div style="font-weight: 600;" id="ratingWorkerName">Ravi Kumar</div>
+                
+                <div class="rating-stars" id="stars">
+                    <i class="fas fa-star" data-rating="1"></i>
+                    <i class="fas fa-star" data-rating="2"></i>
+                    <i class="fas fa-star" data-rating="3"></i>
+                    <i class="fas fa-star" data-rating="4"></i>
+                    <i class="fas fa-star" data-rating="5"></i>
+                </div>
+                
+                <div class="feedback-chips">
+                    <div class="feedback-chip" onclick="this.classList.toggle('active')">Professional</div>
+                    <div class="feedback-chip" onclick="this.classList.toggle('active')">On Time</div>
+                    <div class="feedback-chip" onclick="this.classList.toggle('active')">Skilled</div>
+                    <div class="feedback-chip" onclick="this.classList.toggle('active')">Friendly</div>
+                    <div class="feedback-chip" onclick="this.classList.toggle('active')">Affordable</div>
+                </div>
+                
+                <textarea class="form-control" rows="3" placeholder="Leave a comment (optional)..." style="margin-bottom: 1.5rem;"></textarea>
+                
+                <button class="btn btn-primary" style="width: 100%;" onclick="submitRating()">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const options = document.querySelectorAll('.payment-option');
+            options.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    options.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    opt.querySelector('input').checked = true;
+                });
+            });
+            
+            const workerId = localStorage.getItem('selectedWorker') || 'W001';
+            const worker = DATA.workers.find(w => w.id === workerId);
+            
+            if (worker) {
+                document.getElementById('serviceCharge').textContent = worker.price;
+                const priceVal = parseInt(worker.price.replace('₹', ''));
+                document.getElementById('totalPayable').textContent = `₹${priceVal + 20}`;
+                document.getElementById('invoiceWorkerName').textContent = worker.name;
+                document.getElementById('ratingWorkerName').textContent = worker.name;
+                document.getElementById('ratingAvatar').src = `https://ui-avatars.com/api/?name=${worker.name.replace(' ', '+')}&background=047857&color=fff`;
+            }
+
+            // Star Rating Logic
+            const stars = document.querySelectorAll('.rating-stars i');
+            stars.forEach(star => {
+                star.addEventListener('click', (e) => {
+                    const rating = parseInt(e.target.dataset.rating);
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+
+        function processPayment() {
+            const btn = document.querySelector('.payment-container .btn-primary');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            
+            setTimeout(() => {
+                document.getElementById('paymentSection').style.display = 'none';
+                document.getElementById('invoiceSection').classList.add('active');
+            }, 1500);
+        }
+
+        function openRatingModal() {
+            document.getElementById('ratingModal').classList.add('active');
+        }
+
+        function submitRating() {
+            document.getElementById('ratingModal').classList.remove('active');
+            showToast('Review submitted successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = 'customer.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

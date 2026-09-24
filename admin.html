@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-hands-helping text-primary"></i>
+                    CoopConnect <span style="color: var(--ai);">AI</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="admin.html" class="nav-item active"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="#" class="nav-item"><i class="fas fa-users"></i> Workers</a>
+                <a href="#" class="nav-item"><i class="fas fa-user-friends"></i> Customers</a>
+                <a href="#" class="nav-item"><i class="fas fa-calendar-check"></i> Bookings</a>
+                <a href="#verification" class="nav-item"><i class="fas fa-user-check"></i> Verification</a>
+                <a href="#" class="nav-item"><i class="fas fa-cogs"></i> Services</a>
+                <a href="#" class="nav-item"><i class="fas fa-rupee-sign"></i> Payments</a>
+                <a href="#" class="nav-item"><i class="fas fa-shield-alt"></i> Worker Welfare</a>
+                <a href="ai-insights.html" class="nav-item" style="color: var(--ai); background: rgba(59, 130, 246, 0.1);"><i class="fas fa-brain"></i> AI Insights</a>
+                <a href="#" class="nav-item"><i class="fas fa-exclamation-circle"></i> Complaints</a>
+                <a href="#" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header animate-fade-in-up">
+                <div class="user-greeting">
+                    <h1>Cooperative Overview</h1>
+                    <p class="text-muted" style="font-size: 0.875rem;">Tamil Nadu Federation of Labour Cooperatives</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" style="border-color: var(--border);"><i class="fas fa-download"></i> Export Report</button>
+                    <button class="btn btn-ai" onclick="window.location.href='ai-insights.html'"><i class="fas fa-sparkles"></i> Open AI Dashboard</button>
+                </div>
+            </header>
+
+            <!-- Stats -->
+            <div class="admin-stats-grid animate-fade-in-up" style="animation-delay: 0.1s;">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background: #e0f2fe; color: #0284c7;"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div class="admin-stat-val">1,248</div>
+                        <div class="admin-stat-lbl">Total Workers</div>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.25rem;">1,087 Verified (87%)</div>
+                    </div>
+                </div>
+                
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background: #fce7f3; color: #be185d;"><i class="fas fa-user-check"></i></div>
+                    <div>
+                        <div class="admin-stat-val">4,832</div>
+                        <div class="admin-stat-lbl">Active Customers</div>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.25rem;"><i class="fas fa-arrow-up"></i> +12% this month</div>
+                    </div>
+                </div>
+                
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background: #dcfce7; color: #166534;"><i class="fas fa-rupee-sign"></i></div>
+                    <div>
+                        <div class="admin-stat-val">₹18.6L</div>
+                        <div class="admin-stat-lbl">Worker Earnings</div>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.25rem;">Direct transfers this month</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="admin-chart-card">
+                    <div class="chart-title">
+                        <span>Bookings Overview</span>
+                        <select class="form-control" style="width: auto; padding: 0.25rem; font-size: 0.75rem;"><option>Last 7 Days</option></select>
+                    </div>
+                    <div class="css-bar-chart">
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Mon</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Tue</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Wed</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Thu</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Fri</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Sat</div></div>
+                        <div class="css-bar-col"><div class="css-bar" style="height: 0;"></div><div class="css-bar-lbl">Sun</div></div>
+                    </div>
+                    <div style="text-align: center; font-weight: 700; margin-top: 1rem; color: var(--primary);">286 Bookings Today</div>
+                </div>
+
+                <div class="admin-chart-card">
+                    <div class="chart-title">
+                        <span>Service Demand</span>
+                        <span class="badge badge-ai" style="font-size: 0.7rem;"><i class="fas fa-robot"></i> AI Tracking</span>
+                    </div>
+                    <div class="css-h-chart">
+                        <div class="css-h-row">
+                            <div class="css-h-lbl">Electrician</div>
+                            <div class="css-h-bar-container"><div class="css-h-bar" style="width: 0; background: #f59e0b;"></div></div>
+                        </div>
+                        <div class="css-h-row">
+                            <div class="css-h-lbl">Cleaning</div>
+                            <div class="css-h-bar-container"><div class="css-h-bar" style="width: 0; background: #10b981;"></div></div>
+                        </div>
+                        <div class="css-h-row">
+                            <div class="css-h-lbl">Plumber</div>
+                            <div class="css-h-bar-container"><div class="css-h-bar" style="width: 0; background: #3b82f6;"></div></div>
+                        </div>
+                        <div class="css-h-row">
+                            <div class="css-h-lbl">Carpenter</div>
+                            <div class="css-h-bar-container"><div class="css-h-bar" style="width: 0; background: #8b5cf6;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table (Verification) -->
+            <div id="verification" class="data-table-container animate-fade-in-up" style="animation-delay: 0.3s;">
+                <div class="data-table-header">
+                    <h3 style="font-size: 1.125rem;">Worker Verification Queue</h3>
+                    <div class="search-container" style="margin: 0; width: 300px;">
+                        <i class="fas fa-search search-icon" style="font-size: 1rem;"></i>
+                        <input type="text" class="search-input" placeholder="Search ID or Name" style="padding: 0.5rem 1rem 0.5rem 2.5rem; font-size: 0.875rem;">
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Worker ID</th>
+                            <th>Name</th>
+                            <th>Skill</th>
+                            <th>Experience</th>
+                            <th>Certification</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-id="W001">
+                            <td style="font-family: monospace;">W001</td>
+                            <td><div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" style="width:24px; height:24px; border-radius:50%;"> Ravi Kumar</div></td>
+                            <td>Electrician</td>
+                            <td>6 years</td>
+                            <td><span class="text-success"><i class="fas fa-file-alt"></i> Uploaded</span></td>
+                            <td class="status-cell"><span class="badge badge-warning">Pending Review</span></td>
+                            <td class="action-cell">
+                                <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="openVerifyModal('W001')">Review</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: monospace;">W042</td>
+                            <td><div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://ui-avatars.com/api/?name=Anitha+S&background=3b82f6&color=fff" style="width:24px; height:24px; border-radius:50%;"> Anitha S.</div></td>
+                            <td>Cleaning</td>
+                            <td>3 years</td>
+                            <td><span class="text-success"><i class="fas fa-file-alt"></i> Uploaded</span></td>
+                            <td class="status-cell"><span class="badge badge-warning">Pending Review</span></td>
+                            <td class="action-cell">
+                                <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="openVerifyModal('W042')">Review</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: monospace;">W008</td>
+                            <td><div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://ui-avatars.com/api/?name=Manoj+K&background=8b5cf6&color=fff" style="width:24px; height:24px; border-radius:50%;"> Manoj K.</div></td>
+                            <td>Carpenter</td>
+                            <td>8 years</td>
+                            <td><span class="text-danger"><i class="fas fa-times-circle"></i> Missing</span></td>
+                            <td class="status-cell"><span class="badge badge-warning">Pending Docs</span></td>
+                            <td class="action-cell">
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Request</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: monospace;">W005</td>
+                            <td><div style="display: flex; align-items: center; gap: 0.5rem;"><img src="https://ui-avatars.com/api/?name=Lakshmi&background=ec4899&color=fff" style="width:24px; height:24px; border-radius:50%;"> Lakshmi</div></td>
+                            <td>Caregiver</td>
+                            <td>5 years</td>
+                            <td><span class="text-success"><i class="fas fa-file-alt"></i> Verified</span></td>
+                            <td class="status-cell"><span class="badge badge-success">Verified</span></td>
+                            <td class="action-cell">
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Manage</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Verification Modal -->
+    <div class="modal-overlay" id="verifyModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Worker Verification Review</h3>
+                <i class="fas fa-times modal-close"></i>
+            </div>
+            
+            <div class="flex items-center gap-4 mb-4" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" style="width: 80px; height: 80px; border-radius: var(--radius);">
+                <div>
+                    <h3 style="margin-bottom: 0.25rem;">Ravi Kumar</h3>
+                    <div class="text-muted" style="font-size: 0.875rem;">ID: <span id="verifyWorkerId">W001</span> • Electrician</div>
+                </div>
+            </div>
+
+            <div class="verify-grid">
+                <div class="verify-item">
+                    <div class="verify-item-lbl">Aadhar / ID Card</div>
+                    <div class="verify-item-val text-success"><i class="fas fa-check-circle"></i> Authenticated</div>
+                </div>
+                <div class="verify-item">
+                    <div class="verify-item-lbl">Cooperative Membership</div>
+                    <div class="verify-item-val">Coimbatore Labour Co-op</div>
+                </div>
+                <div class="verify-item">
+                    <div class="verify-item-lbl">Experience Proof</div>
+                    <div class="verify-item-val">6 Years (Letter Attached)</div>
+                </div>
+                <div class="verify-item">
+                    <div class="verify-item-lbl">Police Verification</div>
+                    <div class="verify-item-val text-success"><i class="fas fa-check-circle"></i> Cleared (Aug 2026)</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <div class="verify-item-lbl">Uploaded Certifications</div>
+                <div class="doc-upload" style="cursor: default; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-file-pdf text-danger" style="font-size: 1.5rem;"></i>
+                        <span style="font-weight: 500; font-size: 0.875rem;">ITI_Electrical_Diploma.pdf</span>
+                    </div>
+                    <a href="#" class="text-primary" style="font-size: 0.875rem;">View Document</a>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button class="btn btn-outline" style="flex: 1; border-color: var(--danger); color: var(--danger);">Reject / Request Docs</button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="approveWorker()">Approve Worker</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

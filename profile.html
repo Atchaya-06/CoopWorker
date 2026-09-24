@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: '\f2b5'; /* fa-handshake */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: -20px;
+            bottom: -50px;
+            font-size: 15rem;
+            color: rgba(255,255,255,0.05);
+        }
+
+        .profile-avatar-container {
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+            background: white;
+        }
+
+        .verified-tick {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: white;
+            color: var(--primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            display: inline-flex;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .certification-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            background: var(--surface);
+        }
+        
+        .cert-icon {
+            width: 48px;
+            height: 48px;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .review-card {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+        }
+        
+        .review-card:last-child {
+            border-bottom: none;
+        }
+
+        .coop-badge {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px dashed var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header { flex-direction: column; text-align: center; }
+            .profile-stats { justify-content: center; }
+            .profile-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-hands-helping text-primary"></i> CoopConnect <span>AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="customer.html" class="nav-item">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="profile-header animate-fade-in-up">
+                <div class="profile-avatar-container">
+                    <img src="" id="profileAvatar" class="profile-avatar" alt="Worker">
+                    <div class="verified-tick"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div>
+                    <h1 style="margin-bottom: 0.25rem; font-size: 2rem;" id="profileName">Worker Name</h1>
+                    <div style="font-size: 1.125rem; opacity: 0.9; margin-bottom: 0.5rem;" id="profileSkill">Skill</div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item"><i class="fas fa-star text-warning"></i> <span id="profileRating">4.8</span> (124)</div>
+                        <div class="stat-item"><i class="fas fa-briefcase"></i> <span id="profileExp">6 years</span> exp</div>
+                        <div class="stat-item"><i class="fas fa-map-marker-alt"></i> <span id="profileDist">1.8 km</span> away</div>
+                    </div>
+                </div>
+                
+                <div style="margin-left: auto; text-align: center; background: white; color: var(--text); padding: 1rem 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+                    <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem;">Starting from</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--primary-dark);" id="profilePrice">₹450</div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="window.location.href='booking.html'">Book Worker</button>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <h3 class="card-title"><i class="fas fa-user"></i> About</h3>
+                        <p class="text-muted" style="line-height: 1.8;">Highly skilled and certified professional with extensive experience in residential and commercial jobs. Dedicated to providing safe, high-quality, and timely service to all customers. Proud member of the local labour cooperative federation.</p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <span class="badge badge-ai" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">Professional</span>
+                            <span class="badge badge-success" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">Punctual</span>
+                            <span class="badge badge-warning" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">Highly Rated</span>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <h3 class="card-title"><i class="fas fa-award"></i> Certifications</h3>
+                        <div id="certificationsList">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title"><i class="fas fa-comments"></i> Recent Reviews</h3>
+                        <div class="review-card">
+                            <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
+                                <div style="font-weight: 600;">Suresh K.</div>
+                                <div class="text-warning"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.875rem;">Very professional and fixed the issue quickly. Rates were transparent as per the cooperative guidelines. Highly recommended!</p>
+                        </div>
+                        <div class="review-card">
+                            <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
+                                <div style="font-weight: 600;">Priya M.</div>
+                                <div class="text-warning"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.875rem;">Arrived on time and did a neat job. The AI matching really found a good skilled worker near my location.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="coop-badge">
+                        <i class="fas fa-users" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                        <h4 id="profileCoop">Cooperative Name</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Verified Member. By booking this worker, you are directly contributing to their welfare fund and fair wage ecosystem.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title"><i class="fas fa-clock"></i> Availability</h3>
+                        <ul style="font-size: 0.875rem; color: var(--text-muted);">
+                            <li class="flex justify-between" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                                <span>Monday - Friday</span> <span style="color: var(--success); font-weight: 500;">9:00 AM - 6:00 PM</span>
+                            </li>
+                            <li class="flex justify-between" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                                <span>Saturday</span> <span style="color: var(--success); font-weight: 500;">9:00 AM - 2:00 PM</span>
+                            </li>
+                            <li class="flex justify-between" style="padding: 0.5rem 0;">
+                                <span>Sunday</span> <span style="color: var(--danger); font-weight: 500;">Unavailable</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const workerId = localStorage.getItem('selectedWorker') || 'W001';
+            const worker = DATA.workers.find(w => w.id === workerId);
+            
+            if (worker) {
+                document.getElementById('profileName').textContent = worker.name;
+                document.getElementById('profileSkill').textContent = worker.skill;
+                document.getElementById('profileRating').textContent = worker.rating;
+                document.getElementById('profileExp').textContent = worker.experience;
+                document.getElementById('profileDist').textContent = worker.distance;
+                document.getElementById('profilePrice').textContent = worker.price;
+                document.getElementById('profileCoop').textContent = worker.cooperative;
+                document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?name=${worker.name.replace(' ', '+')}&background=047857&color=fff`;
+
+                const certList = document.getElementById('certificationsList');
+                if (worker.certifications && worker.certifications.length > 0) {
+                    worker.certifications.forEach(cert => {
+                        certList.innerHTML += `
+                            <div class="certification-card">
+                                <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+                                <div>
+                                    <div style="font-weight: 600;">${cert}</div>
+                                    <div style="font-size: 0.75rem; color: var(--success);"><i class="fas fa-check-circle"></i> Verified & Active</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

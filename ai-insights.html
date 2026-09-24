@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insights - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-hands-helping text-primary"></i> CoopConnect <span style="color: var(--ai);">AI</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="admin.html" class="nav-item"><i class="fas fa-arrow-left"></i> Back to Admin</a>
+                <div style="margin: 2rem 0 1rem; padding-left: 1rem; font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Intelligence Hub</div>
+                <a href="#forecast" class="nav-item active" style="background: rgba(59, 130, 246, 0.1); color: var(--ai);"><i class="fas fa-chart-line"></i> Demand Forecast</a>
+                <a href="#allocation" class="nav-item"><i class="fas fa-network-wired"></i> Workforce Allocation</a>
+                <a href="#matching" class="nav-item"><i class="fas fa-robot"></i> Matching Engine</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header animate-fade-in-up">
+                <div class="user-greeting">
+                    <h1>AI Workforce Intelligence</h1>
+                    <p class="text-muted">Turn cooperative service data into smarter workforce decisions.</p>
+                </div>
+                <div class="badge badge-ai" style="font-size: 1rem; padding: 0.5rem 1rem;"><i class="fas fa-circle text-ai" style="font-size: 0.5rem; margin-right: 0.5rem; animation: pulse 2s infinite;"></i> Engine Active</div>
+            </header>
+
+            <!-- Demand Forecast -->
+            <section id="forecast" class="animate-fade-in-up" style="animation-delay: 0.1s; margin-bottom: 3rem;">
+                <div class="ai-insight-banner mb-6" style="margin-bottom: 2rem;">
+                    <div class="ai-insight-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div>
+                        <h3 style="color: #1e3a8a; margin-bottom: 0.25rem;">AI Insight Alert</h3>
+                        <p style="color: #1e40af;">Cleaning demand is predicted to increase by 24% this weekend due to the upcoming local festival. Deploy additional cleaning personnel to Zone A and Zone B.</p>
+                    </div>
+                </div>
+
+                <div class="admin-chart-card">
+                    <div class="chart-title">
+                        <span>7-Day Service Demand Forecast <span class="badge badge-ai" style="font-size: 0.7rem; margin-left: 0.5rem;">AI Generated</span></span>
+                    </div>
+                    
+                    <div style="position: relative; height: 300px; margin-top: 2rem; border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); padding-left: 1rem;">
+                        <!-- Y Axis labels -->
+                        <div style="position: absolute; left: -40px; top: 0; color: var(--text-muted); font-size: 0.75rem;">High</div>
+                        <div style="position: absolute; left: -40px; bottom: 0; color: var(--text-muted); font-size: 0.75rem;">Low</div>
+                        
+                        <!-- SVG Curve Mockup representing forecast -->
+                        <svg width="100%" height="100%" viewBox="0 0 1000 300" preserveAspectRatio="none">
+                            <!-- Grid lines -->
+                            <line x1="0" y1="75" x2="1000" y2="75" stroke="#f1f5f9" stroke-width="1" />
+                            <line x1="0" y1="150" x2="1000" y2="150" stroke="#f1f5f9" stroke-width="1" />
+                            <line x1="0" y1="225" x2="1000" y2="225" stroke="#f1f5f9" stroke-width="1" />
+                            
+                            <!-- Cleaning (Surging) -->
+                            <path d="M0,250 C200,240 400,200 600,100 C800,50 1000,30 1000,30" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+                            
+                            <!-- Electrician (Stable) -->
+                            <path d="M0,150 C200,160 400,140 600,150 C800,145 1000,155 1000,155" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5" />
+                            
+                            <!-- Plumber (Slight increase) -->
+                            <path d="M0,200 C200,210 400,190 600,170 C800,160 1000,150 1000,150" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5" />
+                        </svg>
+                        
+                        <!-- Current Day Indicator -->
+                        <div style="position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px dashed #94a3b8;">
+                            <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.25rem 0.5rem; border-radius: var(--radius); font-size: 0.75rem; font-weight: 600; position: absolute; top: -15px; left: -25px;">TODAY</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legend -->
+                    <div class="flex justify-center gap-6 mt-4" style="margin-top: 1.5rem;">
+                        <div class="flex items-center gap-2" style="font-size: 0.875rem;"><span style="display:inline-block; width:12px; height:12px; background:#10b981; border-radius:50%;"></span> Cleaning (Surging)</div>
+                        <div class="flex items-center gap-2" style="font-size: 0.875rem;"><span style="display:inline-block; width:12px; height:12px; background:#f59e0b; border-radius:50%;"></span> Electrician (Stable)</div>
+                        <div class="flex items-center gap-2" style="font-size: 0.875rem;"><span style="display:inline-block; width:12px; height:12px; background:#3b82f6; border-radius:50%;"></span> Plumber (Slight inc)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workforce Allocation -->
+            <section id="allocation" class="animate-fade-in-up" style="animation-delay: 0.2s; margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1.5rem;">Workforce Allocation & Gaps</h2>
+                
+                <div class="data-table-container" style="margin-top: 0;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Service Category</th>
+                                <th>Current Demand</th>
+                                <th>Available Workers</th>
+                                <th>Required (AI Est.)</th>
+                                <th>Gap</th>
+                                <th>AI Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Electrician</strong></td>
+                                <td><span class="badge badge-warning">High</span></td>
+                                <td>42</td>
+                                <td>58</td>
+                                <td><span class="text-danger font-bold">-16</span></td>
+                                <td><i class="fas fa-magic text-ai"></i> Deploy workers from nearby zones</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plumber</strong></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Medium</span></td>
+                                <td>35</td>
+                                <td>38</td>
+                                <td><span class="text-warning font-bold">-3</span></td>
+                                <td>Monitor demand; no action required</td>
+                            </tr>
+                            <tr style="background-color: #f0fdf4;">
+                                <td><strong>Cleaning</strong></td>
+                                <td><span class="badge badge-success" style="background:#ef4444; color:white;">Very High</span></td>
+                                <td>61</td>
+                                <td>82</td>
+                                <td><span class="text-danger font-bold">-21</span></td>
+                                <td><strong>PRIORITY:</strong> Initiate recruitment / Cross-train available labor</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carpenter</strong></td>
+                                <td><span class="badge" style="background:#f1f5f9; color:#475569;">Low</span></td>
+                                <td>28</td>
+                                <td>22</td>
+                                <td><span class="text-success font-bold">+6</span></td>
+                                <td>Offer upskilling in high-demand trades</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- AI Matching Explanation -->
+            <section id="matching" class="animate-fade-in-up" style="animation-delay: 0.3s;">
+                <h2 style="margin-bottom: 1.5rem;">The Matching Algorithm Explained</h2>
+                
+                <div class="grid grid-cols-2 gap-8 items-center">
+                    <div class="admin-chart-card">
+                        <h3 style="margin-bottom: 1.5rem;">Weightage Distribution</h3>
+                        
+                        <div class="css-h-chart">
+                            <div class="css-h-row">
+                                <div class="css-h-lbl" style="width: 150px;">Skill Compatibility</div>
+                                <div class="css-h-bar-container"><div class="css-h-bar" style="width: 35%; background: var(--ai);"></div></div>
+                                <div style="margin-left: 1rem; font-weight: 600; width: 40px;">35%</div>
+                            </div>
+                            <div class="css-h-row">
+                                <div class="css-h-lbl" style="width: 150px;">Location Distance</div>
+                                <div class="css-h-bar-container"><div class="css-h-bar" style="width: 25%; background: #60a5fa;"></div></div>
+                                <div style="margin-left: 1rem; font-weight: 600; width: 40px;">25%</div>
+                            </div>
+                            <div class="css-h-row">
+                                <div class="css-h-lbl" style="width: 150px;">Availability</div>
+                                <div class="css-h-bar-container"><div class="css-h-bar" style="width: 20%; background: #93c5fd;"></div></div>
+                                <div style="margin-left: 1rem; font-weight: 600; width: 40px;">20%</div>
+                            </div>
+                            <div class="css-h-row">
+                                <div class="css-h-lbl" style="width: 150px;">Customer Rating</div>
+                                <div class="css-h-bar-container"><div class="css-h-bar" style="width: 10%; background: #bfdbfe;"></div></div>
+                                <div style="margin-left: 1rem; font-weight: 600; width: 40px;">10%</div>
+                            </div>
+                            <div class="css-h-row">
+                                <div class="css-h-lbl" style="width: 150px;">Experience Level</div>
+                                <div class="css-h-bar-container"><div class="css-h-bar" style="width: 10%; background: #dbeafe;"></div></div>
+                                <div style="margin-left: 1rem; font-weight: 600; width: 40px;">10%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                            <div style="font-size: 3rem; color: var(--ai); margin-bottom: 1rem;"><i class="fas fa-brain"></i></div>
+                            <h3 style="margin-bottom: 1rem;">Transparent & Fair Matching</h3>
+                            <p class="text-muted" style="margin-bottom: 1.5rem; line-height: 1.6;">The prototype uses a composite scoring system to generate an intelligent matching score. By balancing skill, proximity, and fairness metrics, the platform ensures equitable distribution of work among cooperative members while maintaining high service quality for customers.</p>
+                            
+                            <div class="flex gap-2">
+                                <span class="badge" style="background: var(--background); border: 1px solid var(--border);">No Bias</span>
+                                <span class="badge" style="background: var(--background); border: 1px solid var(--border);">Co-op Friendly</span>
+                                <span class="badge" style="background: var(--background); border: 1px solid var(--border);">Hyper-local</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

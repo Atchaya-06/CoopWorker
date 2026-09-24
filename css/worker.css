@@ -1,0 +1,193 @@
+/* Worker Dashboard Styles */
+
+body {
+    background-color: #fffbeb; /* Light warm background for worker side */
+}
+
+/* Sidebar override for worker theme */
+.worker-sidebar {
+    background-color: #27272a;
+    color: white;
+}
+
+.worker-sidebar .nav-item {
+    color: #a1a1aa;
+}
+
+.worker-sidebar .nav-item:hover, .worker-sidebar .nav-item.active {
+    background-color: #3f3f46;
+    color: white;
+}
+
+.worker-sidebar .logo {
+    color: white;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* Job Cards */
+.job-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.job-info {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.job-time {
+    background: var(--primary-bg);
+    color: var(--primary-dark);
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    text-align: center;
+    min-width: 80px;
+}
+
+.job-time-val { font-size: 1.25rem; font-weight: 700; }
+.job-time-lbl { font-size: 0.75rem; }
+
+.job-details h4 { margin-bottom: 0.25rem; font-size: 1.125rem; }
+.job-meta { color: var(--text-muted); font-size: 0.875rem; display: flex; gap: 1rem; }
+
+.job-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Earnings Chart Mockup */
+.chart-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 200px;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.chart-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.chart-bar-fill {
+    width: 100%;
+    background: var(--primary);
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease;
+}
+
+.chart-lbl {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Welfare Cards */
+.welfare-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.welfare-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.welfare-icon {
+    width: 60px;
+    height: 60px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 992px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .welfare-grid { grid-template-columns: 1fr; }
+    .job-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .job-actions { width: 100%; justify-content: space-between; }
+}
+
+@media (max-width: 768px) {
+    .worker-sidebar { transform: translateX(-100%); }
+    .stats-grid { grid-template-columns: 1fr; }
+}

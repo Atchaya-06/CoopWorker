@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Tracking - CoopConnect AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tracking-layout {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Mock Map */
+        .map-container {
+            flex: 1;
+            position: relative;
+            background-color: #e5e5f7;
+            background-image:  radial-gradient(#444cf7 0.5px, transparent 0.5px), radial-gradient(#444cf7 0.5px, #e5e5f7 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0,10px 10px;
+            opacity: 0.8;
+            overflow: hidden;
+        }
+        
+        .map-overlay-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.8) 100%);
+        }
+
+        .map-pin {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translate(-50%, -100%);
+            z-index: 10;
+        }
+
+        .pin-label {
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .pin-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .pin-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px 6px 0;
+            border-style: solid;
+        }
+
+        .pin-customer .pin-icon { background: var(--text); }
+        .pin-customer .pin-icon::after { border-color: var(--text) transparent transparent transparent; }
+        
+        .pin-worker .pin-icon { background: var(--primary); }
+        .pin-worker .pin-icon::after { border-color: var(--primary) transparent transparent transparent; }
+        .pin-worker { transition: all 2s ease-in-out; }
+
+        /* Mock Route Line */
+        .mock-route {
+            position: absolute;
+            top: 45%; left: 35%;
+            width: 30%; height: 20%;
+            border: 4px dashed var(--primary);
+            border-radius: 50%;
+            border-bottom: none;
+            border-right: none;
+            z-index: 5;
+            opacity: 0.5;
+        }
+
+        /* Tracking Panel */
+        .tracking-panel {
+            width: 400px;
+            background: white;
+            box-shadow: -4px 0 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .panel-content {
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .eta-card {
+            background: var(--primary-bg);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .eta-time {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Status Timeline */
+        .status-timeline {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 15px;
+            width: 2px; height: 100%;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .status-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-icon {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .status-item.completed .status-icon {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .status-item.active .status-icon {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px var(--primary-bg);
+        }
+
+        .status-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .status-content p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .status-item.completed .status-content h4 { color: var(--text); }
+        .status-item.active .status-content h4 { color: var(--primary); }
+        .status-item.pending .status-content h4 { color: var(--text-muted); }
+
+        .panel-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .tracking-layout { flex-direction: column; }
+            .tracking-panel { width: 100%; height: 50vh; border-radius: 20px 20px 0 0; margin-top: -20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tracking-layout">
+        <!-- Mock Map -->
+        <div class="map-container">
+            <div class="map-overlay-layer"></div>
+            
+            <div class="mock-route"></div>
+
+            <!-- Customer Location -->
+            <div class="map-pin pin-customer" style="top: 45%; left: 65%;">
+                <div class="pin-label">Your Location</div>
+                <div class="pin-icon"><i class="fas fa-home"></i></div>
+            </div>
+
+            <!-- Worker Location -->
+            <div class="map-pin pin-worker" id="workerPin" style="top: 65%; left: 35%;">
+                <div class="pin-label" id="workerMapName">Ravi Kumar</div>
+                <div class="pin-icon"><i class="fas fa-motorcycle"></i></div>
+            </div>
+        </div>
+
+        <!-- Tracking Panel -->
+        <div class="tracking-panel animate-fade-in-up">
+            <div class="panel-header">
+                <a href="customer.html" class="icon-btn"><i class="fas fa-arrow-left"></i></a>
+                <h3 style="margin: 0;">Live Tracking</h3>
+            </div>
+            
+            <div class="panel-content">
+                <div class="eta-card">
+                    <div class="eta-time" id="etaTime">8 min</div>
+                    <div style="color: var(--primary); font-weight: 500;">Estimated Arrival</div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; background: var(--surface); border: 1px solid var(--border); padding: 1rem; border-radius: var(--radius);">
+                    <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=047857&color=fff" id="workerAvatar" style="width: 50px; height: 50px; border-radius: 50%;">
+                    <div style="flex: 1;">
+                        <h4 id="workerName">Ravi Kumar</h4>
+                        <div style="font-size: 0.875rem; color: var(--text-muted);">Cooperative Electrician</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="icon-btn" style="color: var(--primary);"><i class="fas fa-phone-alt"></i></button>
+                        <button class="icon-btn" style="color: var(--primary);"><i class="fas fa-comment"></i></button>
+                    </div>
+                </div>
+
+                <h4>Tracking Status</h4>
+                <div class="status-timeline">
+                    <div class="status-item completed">
+                        <div class="status-icon"><i class="fas fa-check"></i></div>
+                        <div class="status-content">
+                            <h4>Booking Confirmed</h4>
+                            <p>Worker assigned from cooperative.</p>
+                        </div>
+                    </div>
+                    <div class="status-item completed">
+                        <div class="status-icon"><i class="fas fa-check"></i></div>
+                        <div class="status-content">
+                            <h4>Worker Accepted</h4>
+                            <p>Ravi has accepted the job.</p>
+                        </div>
+                    </div>
+                    <div class="status-item active" id="statusOnWay">
+                        <div class="status-icon"><i class="fas fa-motorcycle"></i></div>
+                        <div class="status-content">
+                            <h4>On the Way</h4>
+                            <p>Worker is travelling to your location.</p>
+                        </div>
+                    </div>
+                    <div class="status-item pending" id="statusArrived">
+                        <div class="status-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="status-content">
+                            <h4>Worker Arrived</h4>
+                            <p>Waiting for worker to reach.</p>
+                        </div>
+                    </div>
+                    <div class="status-item pending" id="statusCompleted">
+                        <div class="status-icon"><i class="fas fa-flag-checkered"></i></div>
+                        <div class="status-content">
+                            <h4>Service Completed</h4>
+                            <p>Pending completion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <button class="btn btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);" onclick="showToast('Cannot cancel while worker is on the way. Please call them.', 'danger')">
+                    Cancel Booking
+                </button>
+                
+                <!-- Demo trigger to complete job -->
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="simulateCompletion()">
+                    [Demo] Fast Forward to Completion
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const workerId = localStorage.getItem('selectedWorker') || 'W001';
+            const worker = DATA.workers.find(w => w.id === workerId);
+            
+            if (worker) {
+                document.getElementById('workerName').textContent = worker.name;
+                document.getElementById('workerMapName').textContent = worker.name;
+                document.getElementById('workerAvatar').src = `https://ui-avatars.com/api/?name=${worker.name.replace(' ', '+')}&background=047857&color=fff`;
+            }
+
+            // Simulate movement
+            setTimeout(() => {
+                const pin = document.getElementById('workerPin');
+                pin.style.top = '55%';
+                pin.style.left = '45%';
+                document.getElementById('etaTime').textContent = '4 min';
+            }, 3000);
+        });
+
+        function simulateCompletion() {
+            // Update UI to arrived, then completed
+            document.getElementById('statusOnWay').classList.replace('active', 'completed');
+            document.getElementById('statusOnWay').querySelector('.status-icon').innerHTML = '<i class="fas fa-check"></i>';
+            
+            document.getElementById('statusArrived').classList.replace('pending', 'completed');
+            document.getElementById('statusArrived').querySelector('.status-icon').innerHTML = '<i class="fas fa-check"></i>';
+            
+            document.getElementById('statusCompleted').classList.replace('pending', 'active');
+            
+            const pin = document.getElementById('workerPin');
+            pin.style.top = '45%';
+            pin.style.left = '65%';
+            document.getElementById('etaTime').textContent = 'Arrived';
+            
+            showToast('Service completed! Redirecting to payment...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'payment.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
